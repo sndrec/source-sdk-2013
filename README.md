@@ -54,6 +54,28 @@ You can then, in the root of the cloned directory, you can navigate to `game` an
 
 *Mods that are distributed on Steam MUST be built against the Steam Runtime, which the above steps will automatically do for you.*
 
+## Directory layout
+
+The main game code lives under `src/game` and is divided into three logical
+folders:
+
+- `client` – client side logic and HUD code.
+- `server` – server side logic.
+- `shared` – code shared between client and server.
+
+Team Fortress 2 specific code can be found in `src/game/*/tf`.  A basic mod
+template lives in `game/mod_tf`, which is built as part of the Linux build
+instructions above.
+
+### Key Team Fortress files
+
+- `src/game/shared/tf/tf_weaponbase.h` – base class for TF weapons.
+- `src/game/shared/tf/tf_projectile_base.h` – base class for projectiles.
+- `src/game/shared/econ/attribute_manager.h` – core of the attribute system.
+
+When parsing the item schema the encryption key can be found in
+`src/game/shared/econ/econ_item_system.h` (`"A5fSXbf7"`).
+
 ## Distributing your Mod
 
 There is guidance on distributing your mod both on and off Steam available at the following link:
