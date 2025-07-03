@@ -1,0 +1,17 @@
+WeaponData
+{
+    "printname"        "My Awesome New Rocket Launcer"
+    "viewmodel"        "models/weapons/v_rocketlauncher.mdl"
+    "playermodel"      "models/weapons/w_rocketlauncher.mdl"
+    "anim_prefix"      "rocketlauncher"
+    "bucket"           "0"
+    "bucket_position"  "0"
+    "clip_size"        "6"
+    "default_clip"     "6"
+    "primary_ammo"     "TF_AMMO_PRIMARY"
+    "secondary_ammo"   "None"
+    "weight"           "5"
+    "item_flags"       "0"
+    "Damage"           "90"
+    "ProjectileType"   "projectile_rocket"
+}

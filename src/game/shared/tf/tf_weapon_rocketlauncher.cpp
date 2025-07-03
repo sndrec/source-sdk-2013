@@ -149,6 +149,27 @@ BEGIN_DATADESC( CTFCrossbow )
 END_DATADESC()
 #endif
 
+//=============================================================================
+//
+// Six clip rocket launcher tables.
+//
+IMPLEMENT_NETWORKCLASS_ALIASED( TFRocketLauncher_SixClip, DT_WeaponRocketLauncher_SixClip )
+
+BEGIN_NETWORK_TABLE( CTFRocketLauncher_SixClip, DT_WeaponRocketLauncher_SixClip )
+END_NETWORK_TABLE()
+
+BEGIN_PREDICTION_DATA( CTFRocketLauncher_SixClip )
+END_PREDICTION_DATA()
+
+LINK_ENTITY_TO_CLASS( tf_weapon_rocketlauncher_sixclip, CTFRocketLauncher_SixClip );
+PRECACHE_WEAPON_REGISTER( tf_weapon_rocketlauncher_sixclip );
+
+// Server specific.
+#ifndef CLIENT_DLL
+BEGIN_DATADESC( CTFRocketLauncher_SixClip )
+END_DATADESC()
+#endif
+
 
 //-----------------------------------------------------------------------------
 // Purpose: 

@@ -26,6 +26,7 @@
 #define CTFRocketLauncher_AirStrike C_TFRocketLauncher_AirStrike
 #define CTFRocketLauncher_Mortar C_TFRocketLauncher_Mortar
 #define CTFCrossbow C_TFCrossbow
+#define CTFRocketLauncher_SixClip C_TFRocketLauncher_SixClip
 #endif // CLIENT_DLL
 
 //=============================================================================
@@ -193,7 +194,25 @@ public:
 	CNetworkVar( float, m_flLastUsedTimestamp );
 
 private:
-	bool m_bMilkNextAttack;
+        bool m_bMilkNextAttack;
+};
+
+// ------------------------------------------------------------------------------
+// Six rocket clip variant of the base launcher
+// ------------------------------------------------------------------------------
+class CTFRocketLauncher_SixClip : public CTFRocketLauncher
+{
+public:
+        DECLARE_CLASS( CTFRocketLauncher_SixClip, CTFRocketLauncher );
+        DECLARE_NETWORKCLASS();
+        DECLARE_PREDICTABLE();
+
+        // Server specific.
+#ifdef GAME_DLL
+        DECLARE_DATADESC();
+#endif
+
+        virtual int             GetWeaponID( void ) const                      { return TF_WEAPON_AWESOME_ROCKETLAUNCHER; }
 };
 
 #endif // TF_WEAPON_ROCKETLAUNCHER_H
