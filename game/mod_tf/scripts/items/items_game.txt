@@ -1,0 +1,24 @@
+"items_game"
+{
+    "items"
+    {
+        "1000"
+        {
+            "name" "My Awesome New Rocket Launcer"
+            "item_class" "tf_weapon_rocketlauncher_sixclip"
+            "item_type_name" "#TF_Weapon_RocketLauncher"
+            "item_name" "My Awesome New Rocket Launcer"
+            "item_slot" "primary"
+            "item_quality" "unique"
+            "baseitem" "1"
+            "min_ilevel" "1"
+            "max_ilevel" "1"
+            "model_player" "models/weapons/w_rocketlauncher.mdl"
+            "attach_to_hands" "1"
+            "used_by_classes"
+            {
+                "soldier" "1"
+            }
+        }
+    }
+}

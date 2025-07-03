@@ -56,7 +56,29 @@ LINK_ENTITY_TO_CLASS( tf_projectile_flare, CTFProjectile_Flare );
 PRECACHE_WEAPON_REGISTER( tf_projectile_flare );
 ```
 
-6. **Expose to the inventory.**  Update the item schema (usually `scripts/items/items_game.txt`) to add an entry referencing the new weapon class name and its HUD slot. Once the schema is loaded, the item can be equipped via the in‑game loadout screen.
+6. **Expose to the inventory.**  Update the item schema (usually `scripts/items/items_game.txt`) to add an entry referencing the new weapon class name and its HUD slot. If the item should be available by default, mark it as a `baseitem` so it automatically appears in every player's inventory. Once the schema is loaded, the item can be equipped via the in‑game loadout screen.
+
+   Example snippet:
+
+   ```txt
+   "items_game"
+   {
+       "items"
+       {
+           "1000"
+           {
+               "name" "My Awesome New Rocket Launcer"
+               "item_class" "tf_weapon_rocketlauncher_sixclip"
+               "item_slot" "primary"
+               "baseitem" "1"
+               "used_by_classes"
+               {
+                   "soldier" "1"
+               }
+           }
+       }
+   }
+   ```
 7. **Compile and test.**  Rebuild both client and server DLLs. If the item is properly defined, it will appear in the loadout UI and can be equipped like existing weapons.
 
 ## Creating a projectile class
