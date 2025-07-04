@@ -1,8 +1,8 @@
-# Team Fortress Weapon Modding Guide
+# Team Fortress Weapon Modding 101
 
-This document explains how weapons are described and registered in the Source SDK's Team Fortress code base. It shows where the weapon enumeration lives, how the weapon info parser works, and outlines the general steps for adding your own weapon and projectile classes.
+This document explains how weapons are described and registered in the Source SDK's Team Fortress code base. It shows where the weapon enumeration lives, how the weapon info parser works, and outlines the general steps for adding your own new base weapons, inherited weapons, and projectile classes.
 
-## Weapon definitions
+## Base weapon definitions
 
 Weapons are enumerated in `tf_shareddefs.h` under `ETFWeaponType`. Every entry maps to an in‑game weapon ID. New weapons should be appended at the end of the enum to avoid breaking demos:
 
@@ -43,7 +43,7 @@ for (i = 0; i < TF_NUM_PROJECTILES; i++)
 
 See lines 61–93 of `tf_weapon_parse.cpp` for the full parser.
 
-## Adding a new weapon
+## Adding a new base weapon
 
 1. **Enumerate the weapon.**  Add a new value at the end of `ETFWeaponType` in `tf_shareddefs.h` so it has a unique ID.
 2. **Map the name and damage type.**  Append the weapon's enumeration name to the `g_aWeaponNames` array in `tf_shareddefs.cpp` and add a corresponding entry to `g_aWeaponDamageTypes`. The compile-time assertions in that file ensure the arrays stay in sync with `TF_WEAPON_COUNT`.
@@ -57,30 +57,79 @@ LINK_ENTITY_TO_CLASS( tf_projectile_flare, CTFProjectile_Flare );
 PRECACHE_WEAPON_REGISTER( tf_projectile_flare );
 ```
 
-7. **Expose to the inventory.**  Update the item schema (usually `scripts/items/items_game.txt`) to add an entry referencing the new weapon class name and its HUD slot. If the item should be available by default, mark it as a `baseitem` so it automatically appears in every player's inventory. Once the schema is loaded, the item can be equipped via the in‑game loadout screen.
+7. **Update the item schema.** (usually `scripts/items/items_game.txt`). This defines lots of useful metadata used by the game.
 
    Example snippet:
 
    ```txt
-   "items_game"
-   {
-       "items"
-       {
-           "1000"
-           {
-               "name" "My Awesome New Rocket Launcer"
-               "item_class" "tf_weapon_rocketlauncher_sixclip"
-               "item_slot" "primary"
-               "baseitem" "1"
-               "used_by_classes"
-               {
-                   "soldier" "1"
-               }
-           }
-       }
-   }
+    "32000"
+    {
+      "name"  "My Awesome New Rocket Launcer"
+      "prefab"  "twilight"
+      "item_class"  "tf_weapon_rocketlauncher_sixclip"
+      "craft_class" "weapon"
+      "craft_material_type" "weapon"
+      "capabilities"
+      {
+        "nameable"    "1"
+      }
+      "tags"
+      {
+        "can_deal_damage"   "1"
+        "can_deal_gib_damage" "1"
+        "can_be_equipped_by_soldier_or_demo"  "1"
+        "can_deal_posthumous_damage"  "1"
+        "can_deal_critical_damage"  "1"
+        "can_deal_long_distance_damage" "1"
+      }
+      "show_in_armory"  "1"
+      "baseitem"      "0"
+      "item_type_name"  "My Awesome New Rocket Launcer"
+      "item_name" "My Awesome New Rocket Launcer"
+      "item_slot" "primary"
+      "item_quality"  "unique"
+      "propername"  "1"
+      "min_ilevel"  "1"
+      "max_ilevel"  "1"
+      "image_inventory" "backpack/weapons/w_models/w_rocketlauncher"
+      "image_inventory_size_w"    "128"
+      "image_inventory_size_h"    "82"
+      "model_player"  "models/weapons/c_models/c_rocketlauncher/c_rocketlauncher.mdl"
+      "attach_to_hands" "1"
+      "used_by_classes"
+      {
+        "soldier" "1"
+      }
+      "static_attrs"
+      {
+        "min_viewmodel_offset"          "10 -3 -10"       
+      }
+      "attributes"
+      {
+        "reduced_healing_from_medics"
+        {
+          "attribute_class" "mult_healing_from_medics"
+          "value" "0.1"
+        }
+      }
+      "mouse_pressed_sound" "ui/item_heavy_gun_pickup.wav"
+      "drop_sound"    "ui/item_heavy_gun_drop.wav"
+    }
    ```
-8. **Compile and test.**  Rebuild both client and server DLLs. If the item is properly defined, it will appear in the loadout UI and can be equipped like existing weapons.
+
+## Adding a new inherited weapon
+
+If your new weapon doesn't have any notable special new behaviour, it might be possible to define it entirely within the item schema, without touching C++ or recompiling the game.
+This process is described in step #7 of the guide to adding a new base weapon. Attributes can be added to weapons in the item schema, allowing you to define weapons with different behaviours and stats without necessarily having to define new base weapon types.
+
+## Loading custom items
+
+To make new weapons available in the in-game inventory so players can equip them, list their item definition indexes in `scripts/custom_item_ids.txt` inside your mod directory (e.g., `game/mod_tf/scripts/custom_item_ids.txt`). Each line should contain a single numeric index:
+
+```txt
+32000
+32001
+```
 
 ## Creating a projectile class
 
