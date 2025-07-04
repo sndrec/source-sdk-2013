@@ -1692,12 +1692,44 @@ void CPlayerInventory::SOCacheSubscribed( const CSteamID & steamIDOwner, GCSDK::
 
 	// add all the items already in the inventory
 	CSharedObjectTypeCache *pTypeCache = m_pSOCache->FindTypeCache( CEconItem::k_nTypeID );
-	if( pTypeCache )
+	if (pTypeCache)
 	{
-		for( uint32 unItem = 0; unItem < pTypeCache->GetCount(); unItem++ )
+		for (uint32 unItem = 0; unItem < pTypeCache->GetCount(); unItem++)
 		{
-			CEconItem *pItem = (CEconItem *)pTypeCache->GetObject( unItem );
-			AddEconItem(pItem, true, false, true );
+			CEconItem* pItem = (CEconItem*)pTypeCache->GetObject(unItem);
+			AddEconItem(pItem, true, false, true);
+		}
+
+		// Add custom items listed in scripts/custom_item_ids.txt
+		FileHandle_t hFile = g_pFullFileSystem->Open("scripts/custom_item_ids.txt", "r", "MOD");
+		if (hFile != FILESYSTEM_INVALID_HANDLE)
+		{
+			char szLine[64];
+			while (g_pFullFileSystem->ReadLine(szLine, sizeof(szLine), hFile))
+			{
+				int nDefIndex = atoi(szLine);
+				if (nDefIndex <= 0)
+					continue;
+
+				if (ItemSystem()->GetStaticDataForItemByDefIndex(nDefIndex) == NULL)
+					continue;
+
+				if (FindFirstItembyItemDef(nDefIndex))
+					continue;
+
+				if (pTypeCache->GetCount() == 0)
+					continue;
+
+				CEconItem* pTemplate = (CEconItem*)pTypeCache->GetObject(0);
+				CEconItem* pNewItem = new CEconItem(*pTemplate);
+				pNewItem->SetItemID(nDefIndex);
+				pNewItem->SetDefinitionIndex(nDefIndex);
+				m_pSOCache->AddObject((CSharedObject*)pNewItem);
+				pTypeCache->AddObject(pNewItem);
+				AddEconItem(pNewItem, true, false, true);
+			}
+
+			g_pFullFileSystem->Close(hFile);
 		}
 	}
 

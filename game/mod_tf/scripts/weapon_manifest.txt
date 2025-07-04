@@ -1,0 +1,4 @@
+"weaponscripts"
+{
+    "file"    "scripts/tf_weapon_rocketlauncher_sixclip.txt"
+}
