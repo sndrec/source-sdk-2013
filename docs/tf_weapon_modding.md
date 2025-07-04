@@ -47,17 +47,18 @@ See lines 61–93 of `tf_weapon_parse.cpp` for the full parser.
 
 1. **Enumerate the weapon.**  Add a new value at the end of `ETFWeaponType` in `tf_shareddefs.h` so it has a unique ID.
 2. **Map the name and damage type.**  Append the weapon's enumeration name to the `g_aWeaponNames` array in `tf_shareddefs.cpp` and add a corresponding entry to `g_aWeaponDamageTypes`. The compile-time assertions in that file ensure the arrays stay in sync with `TF_WEAPON_COUNT`.
-3. **Create a weapon script.**  Author a KeyValues file under `scripts/` describing the weapon's stats. The parser above will read properties such as `Damage`, `ProjectileType`, and `WeaponType`.
+3. **Create a weapon script.**  Author a KeyValues file under `scripts/` describing the weapon's stats. `tf_weapon_rocketlauncher_sixclip.txt` provides an example file.
 4. **Match the script filename to the entity name.**  The engine loads `<entity>.txt` from `scripts/`, where `<entity>` is the string passed to `LINK_ENTITY_TO_CLASS`. If they differ—e.g., `tf_weapon_rocketlauncher_sixclip` without `scripts/tf_weapon_rocketlauncher_sixclip.txt`—commands like `give` will fail and the item won't equip.
-5. **Implement the C++ class.**  Derive a class from `CTFWeaponBaseGun` or another appropriate base. Use `DECLARE_CLASS`, `DECLARE_NETWORKCLASS`, and if server code is needed, `DECLARE_DATADESC`.
-6. **Register the weapon entity.**  In the server file, use `LINK_ENTITY_TO_CLASS` and `PRECACHE_WEAPON_REGISTER` so the engine knows about your class. Example from `tf_projectile_flare.cpp`:
+5. **List the script in `weapon_manifest.txt`.**  Add an entry to `scripts/weapon_manifest.txt` so the engine precaches the file.
+6. **Implement the C++ class.**  Derive a class from `CTFWeaponBaseGun` or another appropriate base. Use `DECLARE_CLASS`, `DECLARE_NETWORKCLASS`, and if server code is needed, `DECLARE_DATADESC`.
+7. **Register the weapon entity.**  In the server file, use `LINK_ENTITY_TO_CLASS` and `PRECACHE_WEAPON_REGISTER` so the engine knows about your class. Example from `tf_projectile_flare.cpp`:
 
 ```c++
 LINK_ENTITY_TO_CLASS( tf_projectile_flare, CTFProjectile_Flare );
 PRECACHE_WEAPON_REGISTER( tf_projectile_flare );
 ```
 
-7. **Update the item schema.** (usually `scripts/items/items_game.txt`). This defines lots of useful metadata used by the game.
+8. **Update the item schema.** (usually `scripts/items/items_game.txt`). This defines lots of useful metadata used by the game.
 
    Example snippet:
 
