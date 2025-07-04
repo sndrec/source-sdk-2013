@@ -708,6 +708,7 @@ const char *g_aWeaponNames[] =
 	"TF_WEAPON_JAR_GAS",
 	"TF_WEAPON_GRENADE_JAR_GAS",
 	"TF_WEPON_FLAME_BALL",
+    "TF_WEAPON_AWESOME_ROCKETLAUNCHER",
 
 };
 COMPILE_TIME_ASSERT( ARRAYSIZE( g_aWeaponNames ) == TF_WEAPON_COUNT );
@@ -825,6 +826,7 @@ int g_aWeaponDamageTypes[] =
 	DMG_GENERIC, // TF_WEAPON_GRENADE_JAR_GAS
 	DMG_GENERIC | DMG_PREVENT_PHYSICS_FORCE, // TF_WEAPON_FLAME_BALL
 
+        DMG_BLAST | DMG_HALF_FALLOFF | DMG_USEDISTANCEMOD, // TF_WEAPON_AWESOME_ROCKETLAUNCHER
 };
 
 const char *g_szSpecialDamageNames[] =
@@ -1460,7 +1462,7 @@ void LoadObjectInfos( IBaseFileSystem *pFileSystem )
 			// Does it make sense to call the below Steam API so it'll force a validation next startup time?
 			// Need to verify it's real corruption and not someone dorking around with their objects.txt file...
 			//
-			// From Martin Otten: If you have a file on disc and you’re 100% sure it’s
+			// From Martin Otten: If you have a file on disc and youÂ’re 100% sure itÂ’s
 			//  corrupt, call ISteamApps::MarkContentCorrupt( false ), before you shutdown
 			//  the game. This will cause a content validation in Steam.
 
